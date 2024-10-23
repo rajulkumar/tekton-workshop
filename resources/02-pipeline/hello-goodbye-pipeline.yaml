@@ -1,0 +1,24 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: hello-goodbye
+spec:
+  params:
+    - name: username
+      type: string
+  tasks:
+    # A first task that echoes "Hello World"
+    - name: hello
+      taskRef:
+        name: hello
+
+    - name: goodbye
+      # A second task is executed after the first task
+      runAfter:
+        - hello
+      taskRef:
+        name: goodbye
+      params:
+        - name: username
+          value: $(params.username)

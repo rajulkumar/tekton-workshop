@@ -1,0 +1,20 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: read-task
+spec:
+  params:
+    - name: input_file_path
+      type: string
+  workspaces:
+    - name: shared-workspace
+  steps:
+    - name: read
+      image: registry.access.redhat.com/ubi9/ubi:latest
+      script: |
+        #!/bin/sh
+
+        echo "Reading the file from the shared workspace"
+
+        cat "/workspace/shared-workspace/$(params.input_file_path)"

@@ -1,0 +1,23 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: param-and-results
+spec:
+  params:
+    - name: git_url
+      type: string
+    - name: git_revision
+      type: string
+  tasks:
+    - name: task-01
+      taskRef:
+        name: task-01
+      # Step 1: Pass the "git_url" and "git_revision" parameters to the task
+
+    - name: task-02
+      runAfter:
+        - task-01
+      taskRef:
+        name: task-02
+      # Step 2: Pass the "git_commit" result from task-01 to task-02

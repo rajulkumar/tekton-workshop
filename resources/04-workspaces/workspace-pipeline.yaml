@@ -1,0 +1,38 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: workspace-pipeline
+spec:
+  description: |
+    This is a sample pipeline for a CI/CD workflow.
+
+    The pipeline support basic linting and static code analysis for Python projects.
+
+    The pipeline consists of the following steps:
+    - Git clone
+    - Linting and static code analysis
+    - Build the container image
+
+  workspaces:
+    - name: shared-workspace
+  tasks:
+    - name: write-task
+      taskRef:
+        name: write-task
+      params:
+        - name: output_file_path
+          value: "output.txt"
+      workspaces:
+        - name: shared-workspace
+          workspace: shared-workspace
+
+    - name: read-task
+      taskRef:
+        name: read-task
+      params:
+        - name: input_file_path
+          value: "output.txt"
+      workspaces:
+        - name: shared-workspace
+          workspace: shared-workspace

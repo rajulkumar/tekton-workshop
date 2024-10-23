@@ -1,0 +1,27 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: task-01
+spec:
+  # Step 1: Define a custom parameter named "git_url" of type string
+  # Step 2: Define a custom parameter named "git_revision" of type string
+  # Step 3: Define a custom result named "git_commit" of type string
+  steps:
+    - name: print-git-url
+      image: registry.access.redhat.com/ubi9/ubi:latest
+      # Step 4: Use the "git_url" and "git_revision" parameters and print them
+      script: |
+        #!/bin/sh
+        # Place for your code..
+
+    - name: git-commit
+      image: registry.access.redhat.com/ubi9/ubi:latest
+      # Step 5: Return random string as a result of the task (git_commit)
+      script: |
+        #!/bin/sh
+
+        COMMIT="08d0a237b3824787e21897006f0584addaee290a"
+        echo "Setting a git_commit result to: $COMMIT"
+
+        # Place for your code..

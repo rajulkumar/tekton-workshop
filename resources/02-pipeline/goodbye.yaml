@@ -1,0 +1,21 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: goodbye
+spec:
+  params:
+    # Parameters are input values that are passed to the Task
+    - name: username
+      type: string
+  results:
+    - name: message
+      description: "Goodbye message"
+  steps:
+    - name: goodbye
+      image: registry.access.redhat.com/ubi9/ubi:latest
+      script: |
+        #!/bin/bash
+        echo "Goodbye $(params.username)!"
+
+        echo -n "Goodbye $(params.username)!" > $(results.message.path)

@@ -1,0 +1,17 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: test-task
+spec:
+  params:
+    - name: platform
+      type: string
+  steps:
+    - name: test
+      image: registry.access.redhat.com/ubi9/ubi:latest
+      script: |
+        #!/bin/bash
+        echo "Testing on $(params.platform)!"
+        sleep 2
+        echo "Test completed on $(params.platform)!"
