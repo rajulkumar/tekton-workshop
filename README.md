@@ -135,6 +135,8 @@ Waiting for logs to be available...
 [echo-again] Hello Again
 ```
 
+![Task in Dashboard](./img/tekton-dashboard-task.png)
+
 ### Tekton Pipelines
 The task is a single unit of work. The pipeline is a sequence of tasks that are executed in a given order. The pipeline is defined in a `/resources/02-pipeline/hello-world-pipeline.yaml` file.
 
@@ -159,6 +161,8 @@ Waiting for logs to be available...
 
 [goodbye : goodbye] Goodbye araszka!
 ```
+
+![Task in Dashboard](./img/tekton-dashboard-pipeline-basic.png)
 
 ### Parameters
 Parameters and results are a way how to pass a value to or from a task or a pipeline. In this section we are going to create a tasks that accepts a parameter and a pipeline that passes a value to and from the tasks.
@@ -251,7 +255,6 @@ The pipeline should have following steps:
  - Run the tests
     - Run black linter
     - Run yaml linter
-    - Run pytest
     - Run pylint
  - Build the docker image using a Buildah
  - Push the docker image to a registry (optional step if you have an access to a registry)
@@ -259,6 +262,11 @@ The pipeline should have following steps:
 For those who would like to go extra mile you can create an extra step that will deploy the image to a mini-kube cluster and expose the API.
 
 Use a [current repository](https://github.com/Allda/tekton-workshop.git) as an input for the pipeline.
+
+The pipeline structure should be similar to this one:
+
+![Pipeline structure](./img/ci-cd-pipeline.svg)
+![Pipeline dashboard](./img/tekton-dashboard-pipeline.png)
 
 After you're done with an implementation execute the pipeline using `tkn` cli tool.
 
