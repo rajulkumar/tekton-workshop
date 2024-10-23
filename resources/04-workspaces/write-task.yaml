@@ -1,0 +1,20 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: write-task
+spec:
+  params:
+    - name: output_file_path
+      type: string
+  workspaces:
+    - name: shared-workspace
+  steps:
+    - name: write
+      image: registry.access.redhat.com/ubi9/ubi:latest
+      script: |
+        #!/bin/sh
+
+        echo "Writing to the file in the shared workspace"
+
+        echo "Hello from the write-task" > "/workspace/shared-workspace/$(params.output_file_path)"

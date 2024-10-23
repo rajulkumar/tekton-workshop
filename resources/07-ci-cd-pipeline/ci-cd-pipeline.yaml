@@ -1,0 +1,32 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: ci-cd-pipeline
+spec:
+  description: |
+    This is a sample pipeline for a CI/CD workflow.
+
+    The pipeline support basic linting and static code analysis for Python projects.
+
+    The pipeline consists of the following steps:
+    - Git clone
+    - Linting and static code analysis
+      - Black linter
+      - yaml-lint
+      - pylint
+    - Build the container image
+
+  params:
+    # Step 1:
+    # Define parameter for the Git repository URL and revision
+    # This parameter is used to clone the repository
+  workspaces:
+    # Define workspace for sharing files between tasks
+    - name: shared-workspace
+  tasks:
+    # Step 2: Clone the repository
+
+    # Step 3: Run linting and static code analysis
+
+    # Step 4: Build the container image

@@ -1,0 +1,24 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: matrix-pipeline
+spec:
+  description: |
+    This is a sample pipeline for a CI/CD workflow.
+
+    The pipeline support basic linting and static code analysis for Python projects.
+
+    The pipeline consists of the following steps:
+    - Git clone
+    - Linting and static code analysis
+    - Build the container image
+
+  tasks:
+    - name: test-task
+      taskRef:
+        name: test-task
+      matrix:
+        params:
+          - name: platform
+            value: ["linux", "windows", "macos"]
