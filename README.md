@@ -9,6 +9,28 @@ The workshop is divided into several sections. Each section covers a different a
 
 🚀🚀 Good luck and have fun! 🚀🚀
 
+## Table of contents
+- [Tekton workshop](#tekton-workshop)
+  - [Table of contents](#table-of-contents)
+  - [Prerequisites](#prerequisites)
+    - [Minikube](#minikube)
+    - [Kubectl](#kubectl)
+    - [Tekton CLI](#tekton-cli)
+      - [Install Tekton PAC plugin](#install-tekton-pac-plugin)
+  - [Try out Tekton](#try-out-tekton)
+    - [Install Tekton](#install-tekton)
+      - [Start Minikube cluster](#start-minikube-cluster)
+      - [Install Tekton on a cluster](#install-tekton-on-a-cluster)
+      - [Install Tekton Dashboard](#install-tekton-dashboard)
+    - [Tekton Tasks](#tekton-tasks)
+    - [Tekton Pipelines](#tekton-pipelines)
+    - [Parameters](#parameters)
+    - [Workspaces](#workspaces)
+    - [Matrix](#matrix)
+    - [TektonHub](#tektonhub)
+    - [CI/CD pipeline](#cicd-pipeline)
+    - [Pipeline-As-Code](#pipeline-as-code)
+
 ## Prerequisites
 In order to install and run tekton pipelines we need to have a valid execution environment.
 There are couple of options that we can use - Kubernetes, OpenShift, OpenShift Local, Minikube.
@@ -37,8 +59,8 @@ sudo dnf install -y /path/to/tkn-pac-linux-amd64.rpm
 
 ## Try out Tekton
 
-## Install Tekton
-### Start Minikube cluster
+### Install Tekton
+#### Start Minikube cluster
 
 ```bash
 minikube start
@@ -293,8 +315,8 @@ The guide can be found [here](https://pipelinesascode.com/docs/install/getting-s
 
 ![Failed pipeline](./img/pac-ci-cd.png)
 
-Failed pipeline            |  Passed pipeline
-:-------------------------:|:-------------------------:
-![Failed pipeline](./img/pac-failed.png) |  ![Failed pipeline](./img/pac-passed.png)
+|             Failed pipeline              |             Passed pipeline              |
+| :--------------------------------------: | :--------------------------------------: |
+| ![Failed pipeline](./img/pac-failed.png) | ![Failed pipeline](./img/pac-passed.png) |
 
 To test if your PaC works open a new pull request withing your forked repository and check if the pipeline is triggered. You can also make intentional linting error to test if a pipeline fails.
