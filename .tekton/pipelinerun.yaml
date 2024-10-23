@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: pac-demo
+  name: ci-cd-pipeline-pac-demo
   annotations:
     # The event we are targeting as seen from the webhook payload
     # this can be an array too, i.e: [pull_request, push]
@@ -13,7 +13,7 @@ metadata:
 
     # Fetch the tasks from hub, we are able to reference later on it
     # with taskRef and it will automatically be embedded into our pipeline.
-    pipelinesascode.tekton.dev/task: ["git-clone, black, yaml-lint, pylint, buildah"]
+    pipelinesascode.tekton.dev/task: "[git-clone, black, pylint, yaml-lint, buildah]"
 
     # You can add more tasks by increasing the suffix number, you can specify
     # them as array to have multiple of them.
@@ -36,84 +36,86 @@ spec:
       - name: repo_url
       - name: revision
     workspaces:
-      - name: shared-workspace
+      - name: source
       - name: basic-auth
     tasks:
       # Step 1: Clone the repository
-    - name: git-clone
-      taskRef:
-        name: git-clone
-      params:
-        - name: url
-          value: $(params.git_url)
-        - name: revision
-          value: $(params.git_revision)
-      workspaces:
-        - name: output
-          workspace: shared-workspace
+      - name: git-clone
+        taskRef:
+          name: git-clone
+        workspaces:
+          - name: output
+            workspace: source
+          - name: basic-auth
+            workspace: basic-auth
+        params:
+          - name: url
+            value: $(params.repo_url)
+          - name: revision
+            value: $(params.revision)
 
-    # Step 2: Run linting and static code analysis
-    - name: black
-      taskRef:
-        name: black
-      runAfter:
-        - git-clone
-      params:
-        - name: args
-          value: [".", "--check", "--diff"]
-        - name: image
-          value: python:3.12-slim
-      workspaces:
-        - name: shared-workspace
-          workspace: shared-workspace
+      # Step 2: Run linting and static code analysis
+      - name: black
+        taskRef:
+          name: black
+        runAfter:
+          - git-clone
+        params:
+          - name: args
+            value: [".", "--check", "--diff"]
+          - name: image
+            value: python:3.12-slim
+        workspaces:
+          - name: shared-workspace
+            workspace: source
 
-    - name: yaml-lint
-      taskRef:
-        name: yaml-lint
-      runAfter:
-        - git-clone
-      workspaces:
-        - name: shared-workspace
-          workspace: shared-workspace
-      params:
-        - name: args
-          value: ["."]
+      - name: yaml-lint
+        taskRef:
+          name: yaml-lint
+        runAfter:
+          - git-clone
+        workspaces:
+          - name: shared-workspace
+            workspace: source
+        params:
+          - name: args
+            value: ["."]
 
-    - name: pylint
-      taskRef:
-        name: pylint
-      runAfter:
-        - git-clone
-      workspaces:
-        - name: source
-          workspace: shared-workspace
-      params:
-        - name: args
-          value: ["."]
+      - name: pylint
+        taskRef:
+          name: pylint
+        runAfter:
+          - git-clone
+        workspaces:
+          - name: source
+            workspace: source
+        params:
+          - name: args
+            value: ["."]
 
-    # Step 3: Build the container image
-    - name: build
-      taskRef:
-        name: buildah
-      runAfter:
-        - pylint
-        - black
-        - yaml-lint
-      params:
-      - name: IMAGE
-        value: "quay.io/user/myapp"
-      # Try to enable push to any registry of your choice
-      # and mount a secret for authentication if needed
-      # For additional information, please refer to the official documentation
-      # https://hub.tekton.dev/tekton/task/buildah
-      - name: SKIP_PUSH
-        value: "false"
-      workspaces:
-      - name: source
-        workspace: shared-workspace
+      # Step 3: Build the container image
+      - name: build
+        taskRef:
+          name: buildah
+        runAfter:
+          - pylint
+          - black
+          - yaml-lint
+        params:
+          - name: IMAGE
+            value: "quay.io/user/myapp"
+            # Try to enable push to any registry of your choice
+            # and mount a secret for authentication if needed
+            # For additional information, please refer to the official documentation
+            # https://hub.tekton.dev/tekton/task/buildah
+          - name: SKIP_PUSH
+            value: "true"
+        workspaces:
+          - name: source
+            workspace: source
 
   workspaces:
-    - name: shared-workspace
+    - name: source
       volumeClaimTemplate:
         spec:
           accessModes:
