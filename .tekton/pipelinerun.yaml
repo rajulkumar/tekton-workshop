@@ -93,6 +93,13 @@ spec:
           - name: args
             value: ["."]
 
+      # Unit tests are missing here. You can add them by following the same pattern
+      # as the previous tasks.
+
+      # Here is a place for you to add the unit tests task
+      # __________________________________________________
+
+      # __________________________________________________
       # Step 3: Build the container image
       - name: build
         taskRef:

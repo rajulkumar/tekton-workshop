@@ -15,6 +15,7 @@ spec:
       - Black linter
       - yaml-lint
       - pylint
+    - Unit tests - pytest
     - Build the container image
 
   params:
@@ -29,4 +30,6 @@ spec:
 
     # Step 3: Run linting and static code analysis
 
-    # Step 4: Build the container image
+    # Step 4: Run unit tests
+
+    # Step 5: Build the container image

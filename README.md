@@ -27,6 +27,7 @@ The workshop is divided into several sections. Each section covers a different a
     - [Parameters](#parameters)
     - [Workspaces](#workspaces)
     - [Matrix](#matrix)
+    - [Finally section](#finally-section)
     - [TektonHub](#tektonhub)
     - [CI/CD pipeline](#cicd-pipeline)
     - [Pipeline-As-Code](#pipeline-as-code)
@@ -256,6 +257,27 @@ Waiting for logs to be available...
 
 From the output you can see that the task is executed for each operating system given in the matrix.
 
+### Finally section
+The pipeline definition allows to define a `finally` section that is executed after all tasks in a pipeline
+are executed.
+The `finally` section is a good place to clean up resources or send a notification about a pipeline status.
+The section is executed regardless of the previous task status.
+
+Let's see an example:
+```bash
+$ kubectl apply -f resources/06-finally/send-notification-task.yaml
+$ kubectl apply -f resources/06-finally/fail-task.yaml
+$ kubectl apply -f resources/06-finally/finally-pipeline.yaml
+
+# Now lets execute the pipeline with a different set of params.
+tkn pipeline start finally-pipeline -p should_fail=true --showlog
+
+tkn pipeline start finally-pipeline -p should_fail=false --showlog
+```
+See an output of the pipeline and understand how the `finally` section is executed.
+
+**Idea for improvement**: Add a notification task that sends a message to a slack channel or an email.
+
 ### TektonHub
 As a user of Tekton you can use a TektonHub to find and use pre-built tasks and pipelines. The TektonHub is a repository of reusable tasks and pipelines that can be used in your projects. The TektonHub is available at [hub.tekton.dev](https://hub.tekton.dev/)
 
@@ -266,7 +288,6 @@ tkn task start curl --showlog --param url=http://www.example.com/index.html
 ```
 
 Feel free to install any other task from the TektonHub and experiment with it.
-
 
 ### CI/CD pipeline
 Given what we have learned so far let's create a simple CI/CD pipeline that runs a test and builds a docker image.
@@ -320,3 +341,5 @@ The guide can be found [here](https://pipelinesascode.com/docs/install/getting-s
 | ![Failed pipeline](./img/pac-failed.png) | ![Failed pipeline](./img/pac-passed.png) |
 
 To test if your PaC works open a new pull request withing your forked repository and check if the pipeline is triggered. You can also make intentional linting error to test if a pipeline fails.
+
+As you can see the PaC pipeline is missing a unit test step. Go ahead and add a new step that will run a unit test for the code. The step should run a `pytest` command and check if the tests pass.
