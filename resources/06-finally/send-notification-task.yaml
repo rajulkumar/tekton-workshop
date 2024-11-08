@@ -1,0 +1,19 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: send-notification
+spec:
+  params:
+    - name: pipelinerun_name
+      type: string
+    - name: pipeline_status
+      type: string
+  steps:
+    - name: notification
+      image: registry.access.redhat.com/ubi9/ubi:latest
+      script: |
+        #!/bin/bash
+        echo "I am going to send a notification to users"
+
+        echo "Sending notification to users about the pipeline status: $(params.pipelinerun_name) - $(params.pipeline_status)"
