@@ -1,0 +1,33 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: finally-pipeline
+spec:
+  params:
+    - name: should_fail
+      type: string
+  tasks:
+    # A first task that echoes "Hello World"
+    - name: hello
+      taskRef:
+        name: hello
+
+    - name: fail-task
+      taskRef:
+        name: fail-task
+      when:
+        - input: "$(params.should_fail)"
+          operator: in
+          values:
+            - 'true'
+
+  finally:
+    - name: notification
+      taskRef:
+        name: send-notification
+      params:
+        - name: pipelinerun_name
+          value: "$(context.pipelineRun.name)"
+        - name: pipeline_status
+          value: "$(tasks.status)"

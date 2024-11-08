@@ -1,0 +1,14 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: fail-task
+spec:
+  steps:
+    - name: test
+      image: registry.access.redhat.com/ubi9/ubi:latest
+      script: |
+        #!/bin/bash
+        echo "I am going to fail on purpose"
+        sleep 2
+        exit 1
