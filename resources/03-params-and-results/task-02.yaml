@@ -4,6 +4,9 @@ kind: Task
 metadata:
   name: task-02
 spec:
+  params:
+    - name: git_commit
+      type: string
   # Step 1: Define a custom parameter named "git_commit" of type string
   steps:
     - name: print-git-commit
@@ -11,4 +14,4 @@ spec:
       # Step 2: Use the "git_commit" parameter and print it
       script: |
         #!/bin/sh
-        # Place for your code..
+        echo "Git commit: $(params.git_commit)"

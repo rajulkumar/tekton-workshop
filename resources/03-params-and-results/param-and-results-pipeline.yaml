@@ -14,6 +14,11 @@ spec:
       taskRef:
         name: task-01
       # Step 1: Pass the "git_url" and "git_revision" parameters to the task
+      params:
+        - name: git_url
+          value: $(params.git_url)
+        - name: git_revision
+          value: $(params.git_revision)
 
     - name: task-02
       runAfter:
@@ -21,3 +26,6 @@ spec:
       taskRef:
         name: task-02
       # Step 2: Pass the "git_commit" result from task-01 to task-02
+      params:
+        - name: git_commit
+          value: $(tasks.task-01.results.git_commit)

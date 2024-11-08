@@ -4,8 +4,16 @@ kind: Task
 metadata:
   name: task-01
 spec:
-  # Step 1: Define a custom parameter named "git_url" of type string
-  # Step 2: Define a custom parameter named "git_revision" of type string
+  params:
+    # Step 1: Define a custom parameter named "git_url" of type string
+    - name: git_url
+      type: string
+    # Step 2: Define a custom parameter named "git_revision" of type string
+    - name: git_revision
+      type: string
+  results:
+    - name: git_commit
+      type: string
   # Step 3: Define a custom result named "git_commit" of type string
   steps:
     - name: print-git-url
@@ -14,6 +22,8 @@ spec:
       script: |
         #!/bin/sh
         # Place for your code..
+        echo "Git url: $(params.git_url)"
+        echo "Git rev: $(params.git_revision)"
 
     - name: git-commit
       image: registry.access.redhat.com/ubi9/ubi:latest
@@ -25,3 +35,4 @@ spec:
         echo "Setting a git_commit result to: $COMMIT"
 
         # Place for your code..
+        echo $COMMIT > $(results.git_commit.path)
